@@ -8,6 +8,16 @@ function Hero(game, x, y) {
 Hero.prototype = Object.create(Phaser.Sprite.prototype);
 Hero.prototype.constructor = Hero;
 
+// add this method –and the ongoing Hero methods– AFTER these lines, or you
+// will override them when cloning the Phaser.Sprite prototype
+//
+// Hero.prototype = Object.create(Phaser.Sprite.prototype);
+// Hero.prototype.constructor = Hero;
+
+Hero.prototype.move = function (direction) {
+    this.x += direction * 2.5; // 2.5 pixels each frame
+};
+
 PlayState = {};
 // load game assets here
 PlayState.preload = function () {
@@ -50,4 +60,23 @@ window.onload = function () {
     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
     game.state.add('play', PlayState);
     game.state.start('play');
+};
+PlayState.init = function () {
+    this.game.renderer.renderSession.roundPixels = true;
+    this.keys = this.game.input.keyboard.addKeys({
+        left: Phaser.KeyCode.LEFT,
+        right: Phaser.KeyCode.RIGHT
+        
+    });
+};
+PlayState.update = function () {
+    this._handleInput();
+};
+PlayState._handleInput = function () {
+    if (this.keys.left.isDown) { // move hero left
+        this.hero.move(-1);
+    }
+    else if (this.keys.right.isDown) { // move hero right
+        this.hero.move(1);
+    }
 };
