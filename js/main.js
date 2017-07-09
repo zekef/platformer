@@ -4,6 +4,8 @@ function Hero(game, x, y) {
     this.anchor.set(0.5, 0.5);
      this.game.physics.enable(this);
      this.body.collideWorldBounds = true;
+     
+    //  this.body.allowGravity = false;
 }
 
 // inherit from Phaser.Sprite
@@ -42,10 +44,17 @@ PlayState.create = function () {
     this._loadLevel(this.game.cache.getJSON('level:1'));
 };
 PlayState._loadLevel = function (data) {
+    // create all the groups/layers that we need
+    this.platforms = this.game.add.group();
+
     data.platforms.forEach(this._spawnPlatform, this);
     console.log(data);   
     // spawn hero and enemies
-    this._spawnCharacters({hero: data.hero});           
+    this._spawnCharacters({hero: data.hero});
+    
+    // enable gravity
+    const GRAVITY = 1200;
+    this.game.physics.arcade.gravity.y = GRAVITY;
 };
 PlayState._spawnCharacters = function (data) {
     // spawn hero
@@ -59,7 +68,13 @@ PlayState._spawnCharacters = function (data) {
     this.game.add.existing(this.hero);
 };
 PlayState._spawnPlatform = function (platform) {
-    this.game.add.sprite(platform.x, platform.y, platform.image);
+    // this.game.add.sprite(platform.x, platform.y, platform.image);
+    let sprite = this.platforms.create(
+        platform.x, platform.y, platform.image);
+
+    this.game.physics.enable(sprite);
+    sprite.body.allowGravity = false;
+    sprite.body.immovable = true;
 };
 window.onload = function () {
     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
@@ -75,7 +90,11 @@ PlayState.init = function () {
     });
 };
 PlayState.update = function () {
+    this._handleCollisions();
     this._handleInput();
+};
+PlayState._handleCollisions = function () {
+    this.game.physics.arcade.collide(this.hero, this.platforms);
 };
 PlayState._handleInput = function () {
     if (this.keys.left.isDown) { // move hero left
