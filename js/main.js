@@ -37,8 +37,13 @@ Hero.prototype.jump = function () {
 
     return canJump;
 };
+Hero.prototype.bounce = function () {
+    const BOUNCE_SPEED = 200;
+    this.body.velocity.y = -BOUNCE_SPEED;
+};
 function Spider(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'spider');
+    
 
     // anchor
     this.anchor.set(0.5);
@@ -46,6 +51,7 @@ function Spider(game, x, y) {
     this.animations.add('crawl', [0, 1, 2], 8, true);
     this.animations.add('die', [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3], 12);
     this.animations.play('crawl');
+    
 
     // physic properties
     this.game.physics.enable(this);
@@ -67,6 +73,14 @@ Spider.prototype.update = function () {
     else if (this.body.touching.left || this.body.blocked.left) {
         this.body.velocity.x = Spider.SPEED; // turn right
     }
+    
+};
+Spider.prototype.die = function () {
+    this.body.enable = false;
+
+    this.animations.play('die').onComplete.addOnce(function () {
+        this.kill();
+    }, this);
 };
 // load game assets here
 PlayState.preload = function () {
@@ -84,13 +98,15 @@ PlayState.preload = function () {
     this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
+    this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
 };
 
 // create game entities and set up world here
 PlayState.create = function () {
      this.sfx = {
         jump: this.game.add.audio('sfx:jump'),
-        coin: this.game.add.audio('sfx:coin')
+        coin: this.game.add.audio('sfx:coin'),
+        stomp: this.game.add.audio('sfx:stomp')
     };
     this.game.add.image(0, 0, 'background');
     this._loadLevel(this.game.cache.getJSON('level:1'));
@@ -165,6 +181,7 @@ window.onload = function () {
 PlayState.init = function () {
     this.game.renderer.renderSession.roundPixels = true;
     this.keys = this.game.input.keyboard.addKeys({
+        spacebar: Phaser.KeyCode.SPACEBAR,
         left: Phaser.KeyCode.LEFT,
         right: Phaser.KeyCode.RIGHT,
         up: Phaser.KeyCode.UP, // add this line
@@ -186,12 +203,33 @@ PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.hero, this.platforms);
     this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin,
         null, this);
+    this.game.physics.arcade.overlap(this.hero, this.spiders,
+    this._onHeroVsEnemy, null, this);
 };
 PlayState._onHeroVsCoin = function (hero, coin) {
     this.sfx.coin.play();
     coin.kill();
 };
+PlayState._onHeroVsEnemy = function (hero, enemy) {
+    if (hero.body.velocity.y > 0) { // kill enemies when hero is falling
+        hero.bounce();
+        enemy.die();
+        this.sfx.stomp.play();
+    }
+    else { // game over -> restart the game
+        this.sfx.stomp.play();
+        this.game.state.restart();
+    }
+};
 PlayState._handleInput = function () {
+    if (this.keys.spacebar.isDown) {
+        console.log('die!', this.spiders);
+        const spiders = this.spiders.children;
+        for (var i = 0; i < spiders.length; i++) {
+            spiders[i].die();
+            this.sfx.stomp.play();
+        }
+    }
     if (this.keys.left.isDown) { // move hero left
         // ...
         this.hero.move(-1);
