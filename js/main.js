@@ -29,7 +29,7 @@ Hero.prototype.move = function (direction) {
 Hero.prototype.jump = function () {
     const JUMP_SPEED = 600;
     let canJump = this.body.touching.down;
-    canJump = true;
+    // canJump = true;
 
     if (canJump) {
         this.body.velocity.y = -JUMP_SPEED;
@@ -95,7 +95,8 @@ PlayState.preload = function () {
     this.game.load.json('level:1', 'data/level01.json');
     this.game.load.image('hero', 'images/hero_stopped.png');
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
-    this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
+    this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
+    // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
@@ -222,14 +223,14 @@ PlayState._onHeroVsEnemy = function (hero, enemy) {
     }
 };
 PlayState._handleInput = function () {
-    if (this.keys.spacebar.isDown) {
-        console.log('die!', this.spiders);
-        const spiders = this.spiders.children;
-        for (var i = 0; i < spiders.length; i++) {
-            spiders[i].die();
-            this.sfx.stomp.play();
-        }
-    }
+    // if (this.keys.spacebar.isDown) {
+    //     console.log('die!', this.spiders);
+    //     const spiders = this.spiders.children;
+    //     for (var i = 0; i < spiders.length; i++) {
+    //         spiders[i].die();
+    //         this.sfx.stomp.play();
+    //     }
+    // }
     if (this.keys.left.isDown) { // move hero left
         // ...
         this.hero.move(-1);
