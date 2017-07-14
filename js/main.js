@@ -91,15 +91,18 @@ PlayState.preload = function () {
     this.game.load.image('grass:4x1', 'images/grass_4x1.png');
     this.game.load.image('grass:2x1', 'images/grass_2x1.png');
     this.game.load.image('grass:1x1', 'images/grass_1x1.png');
+    this.game.load.image('icon:coin', 'images/pizza_icon.png');
+    this.game.load.image('font:numbers', 'images/numbers.png');
     this.game.load.image('invisible-wall', 'images/invisible_wall.png');
     this.game.load.json('level:1', 'data/level01.json');
-    this.game.load.image('hero', 'images/hero_stopped.png');
+    // this.game.load.image('hero', 'images/hero_stopped.png');
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
     this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
     // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
+    this.game.load.image('hero', 'images/square-colors_42x42.png');
 };
 
 // create game entities and set up world here
@@ -107,10 +110,11 @@ PlayState.create = function () {
      this.sfx = {
         jump: this.game.add.audio('sfx:jump'),
         coin: this.game.add.audio('sfx:coin'),
-        stomp: this.game.add.audio('sfx:stomp')
+        stomp: this.game.add.audio('sfx:stomp'),
     };
     this.game.add.image(0, 0, 'background');
     this._loadLevel(this.game.cache.getJSON('level:1'));
+    this._createHud();
 };
 PlayState._loadLevel = function (data) {
     // create all the groups/layers that we need
@@ -186,6 +190,7 @@ PlayState.init = function () {
         left: Phaser.KeyCode.LEFT,
         right: Phaser.KeyCode.RIGHT,
         up: Phaser.KeyCode.UP, // add this line
+        secretKey: Phaser.KeyCode.TILDE
     });
    this.keys.up.onDown.add(function () {
         let didJump = this.hero.jump();
@@ -193,10 +198,12 @@ PlayState.init = function () {
             this.sfx.jump.play();
         }
     }, this);
+    this.coinPickupCount = 0;
 };
 PlayState.update = function () {
     this._handleCollisions();
     this._handleInput();
+    this.coinFont.text = `x${this.coinPickupCount}`;
 };
 PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.spiders, this.platforms);
@@ -210,6 +217,7 @@ PlayState._handleCollisions = function () {
 PlayState._onHeroVsCoin = function (hero, coin) {
     this.sfx.coin.play();
     coin.kill();
+    this.coinPickupCount++;
 };
 PlayState._onHeroVsEnemy = function (hero, enemy) {
     if (hero.body.velocity.y > 0) { // kill enemies when hero is falling
@@ -223,14 +231,14 @@ PlayState._onHeroVsEnemy = function (hero, enemy) {
     }
 };
 PlayState._handleInput = function () {
-    // if (this.keys.spacebar.isDown) {
-    //     console.log('die!', this.spiders);
-    //     const spiders = this.spiders.children;
-    //     for (var i = 0; i < spiders.length; i++) {
-    //         spiders[i].die();
-    //         this.sfx.stomp.play();
-    //     }
-    // }
+    if (this.keys.secretKey.isDown) {
+        console.log('die!', this.spiders);
+        const spiders = this.spiders.children;
+        for (var i = 0; i < spiders.length; i++) {
+            spiders[i].die();
+            this.sfx.stomp.play();
+        }
+    }
     if (this.keys.left.isDown) { // move hero left
         // ...
         this.hero.move(-1);
@@ -243,4 +251,17 @@ PlayState._handleInput = function () {
     else { // stop
         this.hero.move(0);
     }
+};
+PlayState._createHud = function () {
+    const NUMBERS_STR = '0123456789X ';
+    this.coinFont = this.game.add.retroFont('font:numbers', 20, 26,
+        NUMBERS_STR, 6);
+    let coinIcon = this.game.make.image(0, 0, 'icon:coin');
+    let coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width,
+        coinIcon.height / 2, this.coinFont);
+    coinScoreImg.anchor.set(0, 0.5);
+    this.hud = this.game.add.group();
+    this.hud.add(coinIcon);
+    this.hud.position.set(10, 10);
+    this.hud.add(coinScoreImg);
 };
