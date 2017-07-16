@@ -130,11 +130,13 @@ PlayState.preload = function () {
     this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
     this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
+    this.game.load.spritesheet('door', 'images/door.png', 42, 66);
     // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
     //this.game.load.image('hero', 'images/square-colors_42x42.png');
+    this.game.load.image('key', 'images/key.png');
 };
 
 // create game entities and set up world here
@@ -150,6 +152,7 @@ PlayState.create = function () {
 };
 PlayState._loadLevel = function (data) {
     // create all the groups/layers that we need
+    this.bgDecoration = this.game.add.group();
     this.platforms = this.game.add.group();
     this.coins = this.game.add.group();
     this.spiders = this.game.add.group();
@@ -160,6 +163,12 @@ PlayState._loadLevel = function (data) {
     // spawn hero and enemies
     this._spawnCharacters({hero: data.hero, spiders: data.spiders});
     data.coins.forEach(this._spawnCoin, this);
+    // after spawning the coins in this line:
+    // data.coins.forEach(this._spawnCoin, this);
+    this._spawnDoor(data.door.x, data.door.y);
+    // add it below the call to _spawnDoor
+    // this._spawnDoor(data.door.x, data.door.y);
+    this._spawnKey(data.key.x, data.key.y);
     
     // enable gravity
     const GRAVITY = 1200;
@@ -209,6 +218,18 @@ PlayState._spawnPlatform = function (platform) {
     sprite.body.immovable = true;    
     this._spawnEnemyWall(platform.x, platform.y, 'left');
     this._spawnEnemyWall(platform.x + sprite.width, platform.y, 'right');
+};
+PlayState._spawnDoor = function (x, y) {
+    this.door = this.bgDecoration.create(x, y, 'door');
+    this.door.anchor.setTo(0.5, 1);
+    this.game.physics.enable(this.door);
+    this.door.body.allowGravity = false;
+};
+PlayState._spawnKey = function (x, y) {
+    this.key = this.bgDecoration.create(x, y, 'key');
+    this.key.anchor.set(0.5, 0.5);
+    this.game.physics.enable(this.key);
+    this.key.body.allowGravity = false;
 };
 window.onload = function () {
     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
