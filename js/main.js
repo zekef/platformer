@@ -8,6 +8,10 @@ function Hero(game, x, y) {
      this.maxAirJump = 1;
      this.currentAirJumps = 0;
     //  this.body.allowGravity = false;
+    this.animations.add('stop', [0]);
+    this.animations.add('run', [1, 2], 8, true); // 8fps looped
+    this.animations.add('jump', [3]);
+    this.animations.add('fall', [4]);
 }
 
 // inherit from Phaser.Sprite
@@ -19,12 +23,40 @@ Hero.prototype.constructor = Hero;
 //
 // Hero.prototype = Object.create(Phaser.Sprite.prototype);
 // Hero.prototype.constructor = Hero;
+Hero.prototype._getAnimationName = function () {
+    let name = 'stop'; // default animation
 
+    // jumping
+    if (this.body.velocity.y < 0) {
+        name = 'jump';
+    }
+    // falling
+    else if (this.body.velocity.y >= 0 && !this.body.touching.down) {
+        name = 'fall';
+    }
+    else if (this.body.velocity.x !== 0 && this.body.touching.down) {
+        name = 'run';
+    }
+
+    return name;
+};
+Hero.prototype.update = function () {
+    // update sprite animation, if it needs changing
+    let animationName = this._getAnimationName();
+    if (this.animations.name !== animationName) {
+        this.animations.play(animationName);
+    }
+};
 Hero.prototype.move = function (direction) {
     
     const SPEED = 200;
     this.body.velocity.x = direction * SPEED;
-    
+    if (this.body.velocity.x < 0) {
+        this.scale.x = -1;
+    }
+    else if (this.body.velocity.x > 0) {
+        this.scale.x = 1;
+    }
 };
 Hero.prototype.jump = function () {
     const JUMP_SPEED = 600;
@@ -95,14 +127,14 @@ PlayState.preload = function () {
     this.game.load.image('font:numbers', 'images/numbers.png');
     this.game.load.image('invisible-wall', 'images/invisible_wall.png');
     this.game.load.json('level:1', 'data/level01.json');
-    // this.game.load.image('hero', 'images/hero_stopped.png');
+    this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
     this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
     // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
-    this.game.load.image('hero', 'images/square-colors_42x42.png');
+    //this.game.load.image('hero', 'images/square-colors_42x42.png');
 };
 
 // create game entities and set up world here
@@ -151,9 +183,9 @@ PlayState._spawnCharacters = function (data) {
     // spawn hero
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     console.log(this.hero);
-    // this.hero.scale.x = 109877654321;
+    // this.hero.scale.x = 4;
     // this.hero.scale.y = -1;
-    // this.hero.x = 50;
+    // this.hero.x = 200;
     // this.hero.y = 100;
 
     this.game.add.existing(this.hero);
@@ -203,7 +235,7 @@ PlayState.init = function () {
 PlayState.update = function () {
     this._handleCollisions();
     this._handleInput();
-    this.coinFont.text = `x${this.coinPickupCount}`;
+    this.coinFont.text = `x1000000000000${this.coinPickupCount}`;
 };
 PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.spiders, this.platforms);
