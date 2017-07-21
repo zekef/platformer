@@ -137,11 +137,15 @@ PlayState.preload = function () {
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
     //this.game.load.image('hero', 'images/square-colors_42x42.png');
     this.game.load.image('key', 'images/key.png');
+    this.game.load.audio('sfx:key', 'audio/key.wav');
+    this.game.load.audio('sfx:door', 'audio/door.wav');
 };
 
 // create game entities and set up world here
 PlayState.create = function () {
      this.sfx = {
+         key: this.game.add.audio('sfx:key'),
+        door: this.game.add.audio('sfx:door'),
         jump: this.game.add.audio('sfx:jump'),
         coin: this.game.add.audio('sfx:coin'),
         stomp: this.game.add.audio('sfx:stomp'),
@@ -243,7 +247,7 @@ PlayState.init = function () {
         left: Phaser.KeyCode.LEFT,
         right: Phaser.KeyCode.RIGHT,
         up: Phaser.KeyCode.UP, // add this line
-        secretKey: Phaser.KeyCode.TILDE
+        secretKey: Phaser.KeyCode.TILDE,
     });
    this.keys.up.onDown.add(function () {
         let didJump = this.hero.jump();
@@ -252,6 +256,7 @@ PlayState.init = function () {
         }
     }, this);
     this.coinPickupCount = 0;
+    this.hasKey = false;
 };
 PlayState.update = function () {
     this._handleCollisions();
@@ -266,6 +271,8 @@ PlayState._handleCollisions = function () {
         null, this);
     this.game.physics.arcade.overlap(this.hero, this.spiders,
     this._onHeroVsEnemy, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey,
+        null, this)
 };
 PlayState._onHeroVsCoin = function (hero, coin) {
     this.sfx.coin.play();
@@ -293,7 +300,7 @@ PlayState._handleInput = function () {
         }
     }
     if (this.keys.left.isDown) { // move hero left
-        // ...
+        // ...          `
         this.hero.move(-1);
     }
     else if (this.keys.right.isDown) { // move hero right
@@ -317,4 +324,9 @@ PlayState._createHud = function () {
     this.hud.add(coinIcon);
     this.hud.position.set(10, 10);
     this.hud.add(coinScoreImg);
+};
+PlayState._onHeroVsKey = function (hero, key) {
+    this.sfx.key.play();
+    key.kill();
+    this.hasKey = true;
 };
