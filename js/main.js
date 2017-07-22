@@ -61,11 +61,11 @@ Hero.prototype.move = function (direction) {
 Hero.prototype.jump = function () {
     const JUMP_SPEED = 600;
     let canJump = this.body.touching.down;
-    // canJump = true;
+    canJump = true;
 
-    if (canJump) {
+     if (canJump) {
         this.body.velocity.y = -JUMP_SPEED;
-    }
+     }
 
     return canJump;
 };
@@ -139,6 +139,7 @@ PlayState.preload = function () {
     this.game.load.image('key', 'images/key.png');
     this.game.load.audio('sfx:key', 'audio/key.wav');
     this.game.load.audio('sfx:door', 'audio/door.wav');
+    this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
 };
 
 // create game entities and set up world here
@@ -234,6 +235,13 @@ PlayState._spawnKey = function (x, y) {
     this.key.anchor.set(0.5, 0.5);
     this.game.physics.enable(this.key);
     this.key.body.allowGravity = false;
+    // add a small 'up & down' animation via a tween
+    this.key.y -= 3;
+    this.game.add.tween(this.key)
+        .to({y: this.key.y + 6}, 800, Phaser.Easing.Sinusoidal.InOut)
+        .yoyo(true)
+        .loop()
+        .start();
 };
 window.onload = function () {
     let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
@@ -261,7 +269,8 @@ PlayState.init = function () {
 PlayState.update = function () {
     this._handleCollisions();
     this._handleInput();
-    this.coinFont.text = `x1000000000000${this.coinPickupCount}`;
+    this.coinFont.text = `x16${this.coinPickupCount}`;
+    this.keyIcon.frame = this.hasKey ? 1 : 0;
 };
 PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.spiders, this.platforms);
@@ -273,6 +282,11 @@ PlayState._handleCollisions = function () {
     this._onHeroVsEnemy, null, this);
     this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey,
         null, this)
+        this.game.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor,
+        // ignore if there is no key or the player is on air
+        function (hero, door) {
+            return this.hasKey && hero.body.touching.down;
+        }, this);
 };
 PlayState._onHeroVsCoin = function (hero, coin) {
     this.sfx.coin.play();
@@ -313,10 +327,12 @@ PlayState._handleInput = function () {
     }
 };
 PlayState._createHud = function () {
+    this.keyIcon = this.game.make.image(0, 19, 'icon:key');
+    this.keyIcon.anchor.set(0, 0.5);
     const NUMBERS_STR = '0123456789X ';
     this.coinFont = this.game.add.retroFont('font:numbers', 20, 26,
         NUMBERS_STR, 6);
-    let coinIcon = this.game.make.image(0, 0, 'icon:coin');
+    let coinIcon = this.game.make.image(this.keyIcon.width + 7, 0, 'icon:coin');
     let coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width,
         coinIcon.height / 2, this.coinFont);
     coinScoreImg.anchor.set(0, 0.5);
@@ -324,9 +340,15 @@ PlayState._createHud = function () {
     this.hud.add(coinIcon);
     this.hud.position.set(10, 10);
     this.hud.add(coinScoreImg);
+    this.hud.add(this.keyIcon);
 };
 PlayState._onHeroVsKey = function (hero, key) {
     this.sfx.key.play();
     key.kill();
     this.hasKey = true;
+};
+PlayState._onHeroVsDoor = function (hero, door) {
+    this.sfx.door.play();
+    this.game.state.restart();
+    // TODO: go to the next level instead
 };
