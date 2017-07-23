@@ -192,12 +192,16 @@ PlayState._spawnCoin = function (coin) {
     sprite.body.allowGravity = false;
 };
 
-PlayState._spawnCharacters = function (data) {
-     // spawn spiders
+PlayState._spawnSpiders = function(data) {
     data.spiders.forEach(function (spider) {
         let sprite = new Spider(this.game, spider.x, spider.y);
         this.spiders.add(sprite);
     }, this);
+}
+
+PlayState._spawnCharacters = function (data) {
+     // spawn spiders
+    this._spawnSpiders(data);
     // spawn hero
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     console.log(this.hero);
@@ -208,6 +212,7 @@ PlayState._spawnCharacters = function (data) {
 
     this.game.add.existing(this.hero);
 };
+
 PlayState._spawnEnemyWall = function (x, y, side) {
     let sprite = this.enemyWalls.create(x, y, 'invisible-wall');
     // anchor and y displacement
@@ -263,6 +268,7 @@ PlayState.init = function (data) {
         right: Phaser.KeyCode.RIGHT,
         up: Phaser.KeyCode.UP, // add this line
         secretKey: Phaser.KeyCode.TILDE,
+        secretspawnkey: Phaser.KeyCode.Z,
     });
    this.keys.up.onDown.add(function () {
         let didJump = this.hero.jump();
@@ -302,16 +308,29 @@ PlayState._onHeroVsCoin = function (hero, coin) {
     this.coinPickupCount++;
 };
 PlayState._onHeroVsEnemy = function (hero, enemy) {
-    if (hero.body.velocity.y > 0) { // kill enemies when hero is falling
+    if (hero.body.y + 10 < enemy.body.y) { // kill enemies when hero is falling
         hero.bounce();
         enemy.die();
         this.sfx.stomp.play();
+
+
+        // var data = {
+        //     spiders: [],
+        // };
+        // for (var i = 0; i < 2; i++) {
+        //     data.spiders.push({
+        //         x: this.hero.x + 60 + (i * 30),
+        //         y: this.hero.y - 45 - (i * 30),
+        //     });
+        // }
+        // this._spawnSpiders(data);
     }
     else { // game over -> restart the game
         this.sfx.stomp.play();
         this.game.state.restart(true, false, {level: this.level});
     }
 };
+
 PlayState._handleInput = function () {
     if (this.keys.secretKey.isDown) {
         console.log('die!', this.spiders);
@@ -320,6 +339,17 @@ PlayState._handleInput = function () {
             spiders[i].die();
             this.sfx.stomp.play();
         }
+    }
+    if (this.keys.secretspawnkey.isDown) {
+        console.log('Spawn!')
+        this._spawnSpiders({
+            spiders: [
+                {
+                    "x": this.hero.x + 60,
+                    "y": this.hero.y -45,
+                },
+            ],
+        });
     }
     if (this.keys.left.isDown) { // move hero left
         // ...          `
