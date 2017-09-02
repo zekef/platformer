@@ -1,0 +1,68 @@
+{"frames": [
+
+{
+	"filename": "decor.png",
+	"frame": {"x":797,"y":0,"w":210,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":210,"h":42},
+	"sourceSize": {"w":210,"h":42}
+},
+{
+	"filename": "grass_1x1.png",
+	"frame": {"x":755,"y":0,"w":42,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":42,"h":42},
+	"sourceSize": {"w":42,"h":42}
+},
+{
+	"filename": "grass_2x1.png",
+	"frame": {"x":0,"y":42,"w":84,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":42},
+	"sourceSize": {"w":84,"h":42}
+},
+{
+	"filename": "grass_4x1.png",
+	"frame": {"x":587,"y":0,"w":168,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":168,"h":42},
+	"sourceSize": {"w":168,"h":42}
+},
+{
+	"filename": "grass_6x1.png",
+	"frame": {"x":335,"y":0,"w":252,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":252,"h":42},
+	"sourceSize": {"w":252,"h":42}
+},
+{
+	"filename": "grass_8x1.png",
+	"frame": {"x":0,"y":0,"w":335,"h":42},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":335,"h":42},
+	"sourceSize": {"w":335,"h":42}
+},
+{
+	"filename": "ground.png",
+	"frame": {"x":84,"y":42,"w":966,"h":84},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":966,"h":84},
+	"sourceSize": {"w":966,"h":84}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "platformer.png",
+	"format": "RGBA8888",
+	"size": {"w":1050,"h":126},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:176ad6dc995ed2fe59386aa3bbe01436:62ce56d788d80ae79ab411732af41ff9:990c917d1abbf4fd90f98f6ae23d226e$"
+}
+}
