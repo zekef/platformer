@@ -128,6 +128,14 @@ PlayState.preload = function () {
     this.game.load.image('grass:1x1', 'images/grass_1x1.png');
     this.game.load.image('icon:coin', 'images/pizza_icon.png');
     this.game.load.image('font:numbers', 'images/numbers.png');
+
+
+    this.game.load.spritesheet('buttonvertical', 'images/button-vertical.png',64,64);
+    this.game.load.spritesheet('buttonhorizontal', 'images/button-horizontal.png',96,64);
+    this.game.load.spritesheet('buttondiagonal', 'images/button-diagonal.png',64,64);
+    this.game.load.spritesheet('buttonfire', 'images/button-round-a.png',96,96);
+    this.game.load.spritesheet('buttonjump', 'images/button-round-b.png',96,96);
+
     this.game.load.image('invisible-wall', 'images/invisible_wall.png');
     this.game.load.json('level:1', 'data/level01.json');
     this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
@@ -147,6 +155,12 @@ PlayState.preload = function () {
     this.game.load.audio('sfx:bgm', 'audio/bgm.mp3');
 };
 
+var left=false;
+var right=false;
+var duck= false;
+var fire=false;
+var jump=false;
+
 // create game entities and set up world here
 PlayState.create = function () {
      this.sfx = {
@@ -160,6 +174,150 @@ PlayState.create = function () {
     this.game.add.image(0, 0, 'background');
     this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
     this._createHud();
+
+
+    // create our virtual game controller buttons 
+     var buttonjump = this.game.add.button(600, 500, 'buttonjump', null, this, 0, 1, 0, 1);  //game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame
+    buttonjump.fixedToCamera = true;  //our buttons should stay on the same place  
+    buttonjump.events.onInputOver.add(function(){
+        jump=true;
+        console.log('jump', jump)
+    });
+    buttonjump.events.onInputOut.add(function(){
+        jump=false;
+        console.log('jump', jump)
+    });
+    buttonjump.events.onInputDown.add(function(){
+        jump=true;
+        console.log('jump', jump)
+    });
+    buttonjump.events.onInputUp.add(function(){
+        jump=false;
+        console.log('jump', jump)
+    });
+
+    var buttonfire = this.game.add.button(700, 500, 'buttonfire', null, this, 0, 1, 0, 1);
+    buttonfire.fixedToCamera = true;
+    buttonfire.events.onInputOver.add(function() {
+        fire=true;
+        console.log('fire', fire)
+    });
+    buttonfire.events.onInputOut.add(function(){
+        fire=false;
+        console.log('fire', fire)
+    });
+    buttonfire.events.onInputDown.add(function(){
+        fire=true;
+        console.log('fire', fire)
+    });
+    buttonfire.events.onInputUp.add(function(){
+        fire=false;
+        console.log('fire', fire)
+    });
+
+    var buttonleft = this.game.add.button(0, 472, 'buttonhorizontal', null, this, 0, 1, 0, 1);
+    buttonleft.fixedToCamera = true;
+    buttonleft.events.onInputOver.add(function(){
+        left=true;
+        console.log('left', left)
+    });
+    buttonleft.events.onInputOut.add(function(){
+        left=false;
+        console.log('left', left)
+    });
+    buttonleft.events.onInputDown.add(function(){
+        left=true;
+        console.log('left', left)
+    });
+    buttonleft.events.onInputUp.add(function(){
+        left=false;
+        console.log('left', left)
+    });
+
+    var buttonbottomleft = this.game.add.button(32, 536, 'buttondiagonal', null, this, 6, 4, 6, 4);
+    buttonbottomleft.fixedToCamera = true;
+    buttonbottomleft.events.onInputOver.add(function(){
+        left=true;
+        duck=true;
+        console.log('left', left, 'duck', duck)
+    });
+    buttonbottomleft.events.onInputOut.add(function(){
+        left=false;
+        duck=false;
+        console.log('left', left, 'duck', duck)
+    });
+    buttonbottomleft.events.onInputDown.add(function(){
+        left=true;
+        duck=true;
+        console.log('left', left, 'duck', duck)
+    });
+    buttonbottomleft.events.onInputUp.add(function(){
+        left=false;
+        duck=false;
+        console.log('left', left, 'duck', duck)
+    });
+
+    var buttonright = this.game.add.button(160, 472, 'buttonhorizontal', null, this, 0, 1, 0, 1);
+    buttonright.fixedToCamera = true;
+    buttonright.events.onInputOver.add(function(){
+        right=true;
+        console.log('right', right)
+    });
+    buttonright.events.onInputOut.add(function(){
+        right=false;
+        console.log('right', right)
+    });
+    buttonright.events.onInputDown.add(function(){
+        right=true;
+        console.log('right', right)
+    });
+    buttonright.events.onInputUp.add(function(){
+        right=false;
+        console.log('right', right)
+    });
+
+    var buttonbottomright = this.game.add.button(160, 536, 'buttondiagonal', null, this, 7, 5, 7, 5);
+    buttonbottomright.fixedToCamera = true;
+    buttonbottomright.events.onInputOver.add(function(){
+        right=true;
+        duck=true;
+        console.log('right', right, 'duck', duck)
+    });
+    buttonbottomright.events.onInputOut.add(function(){
+        right=false;
+        duck=false;
+        console.log('right', right, 'duck', duck)
+    });
+    buttonbottomright.events.onInputDown.add(function(){
+        right=true;
+        duck=true;
+        console.log('right', right, 'duck', duck)
+    });
+    buttonbottomright.events.onInputUp.add(function(){
+        right=false;
+        duck=false;
+        console.log('right', right, 'duck', duck)
+    });
+
+    var buttondown = this.game.add.button(96, 536, 'buttonvertical', null, this, 0, 1, 0, 1);
+    buttondown.fixedToCamera = true;
+    buttondown.events.onInputOver.add(function(){
+        duck=true;
+        console.log('duck', duck)
+    });
+    buttondown.events.onInputOut.add(function(){
+        duck=false;
+        console.log('duck', duck)
+    });
+    buttondown.events.onInputDown.add(function(){
+        duck=true;
+        console.log('duck', duck)
+    });
+    buttondown.events.onInputUp.add(function(){
+        duck=false;
+        console.log('duck', duck)
+    });
+
 };
 PlayState._loadLevel = function (data) {
      this.sfx.bgm.play();
