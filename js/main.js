@@ -61,7 +61,7 @@ Hero.prototype.move = function (direction) {
 Hero.prototype.jump = function () {
     const JUMP_SPEED = 600;
     let canJump = this.body.touching.down;
-    //canJump = true;
+    canJump = true;
 
     if (canJump) {
         this.body.velocity.y = -JUMP_SPEED;
@@ -75,7 +75,7 @@ Hero.prototype.bounce = function () {
 };
 function Spider(game, x, y) {
     Phaser.Sprite.call(this, game, x, y, 'spider');
-    
+    this.speed = getRandomSpeed();
 
     // anchor
     this.anchor.set(0.5);
@@ -88,10 +88,12 @@ function Spider(game, x, y) {
     // physic properties
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.velocity.x = Spider.SPEED;
+    this.body.velocity.x = getRandomSpeed();
 }
 
-Spider.SPEED = 100;
+function getRandomSpeed() {
+    return Math.random() * 100;
+}
 
 // inherit from Phaser.Sprite
 Spider.prototype = Object.create(Phaser.Sprite.prototype);
@@ -100,10 +102,10 @@ PlayState = {};
 Spider.prototype.update = function () {
     // check against walls and reverse direction if necessary
     if (this.body.touching.right || this.body.blocked.right) {
-        this.body.velocity.x = -Spider.SPEED; // turn left
+        this.body.velocity.x = -getRandomSpeed(); // turn left
     }
     else if (this.body.touching.left || this.body.blocked.left) {
-        this.body.velocity.x = Spider.SPEED; // turn right
+        this.body.velocity.x = getRandomSpeed(); // turn right
     }
     
 };
@@ -209,7 +211,11 @@ PlayState._spawnCharacters = function (data) {
     // this.hero.scale.y = -1;
     // this.hero.x = 200;
     // this.hero.y = 100;
-
+    // this.spiders.scale.x = 1
+    // this.spiders.scale.y = 4
+    // this.spiders.x = 200
+    // this.spiders.y = 100
+    // this.hero.allowrotation  =  false
     this.game.add.existing(this.hero);
 };
 
@@ -314,16 +320,16 @@ PlayState._onHeroVsEnemy = function (hero, enemy) {
         this.sfx.stomp.play();
 
 
-        // var data = {
-        //     spiders: [],
-        // };
-        // for (var i = 0; i < 2; i++) {
-        //     data.spiders.push({
-        //         x: this.hero.x + 60 + (i * 30),
-        //         y: this.hero.y - 45 - (i * 30),
-        //     });
-        // }
-        // this._spawnSpiders(data);
+        var data = {
+            spiders: [],
+        };
+        for (var i = 0; i < 2; i++) {
+            data.spiders.push({
+                x: this.hero.x + 60 + (i * 30),
+                y: this.hero.y - 45 - (i * 30),
+            });
+        }
+        this._spawnSpiders(data);
     }
     else { // game over -> restart the game
         this.sfx.stomp.play();
