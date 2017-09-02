@@ -287,12 +287,32 @@ PlayState.init = function (data) {
         secretKey: Phaser.KeyCode.TILDE,
         secretspawnkey: Phaser.KeyCode.Z,
     });
-   this.keys.up.onDown.add(function () {
+    this.keys.up.onDown.add(function () {
         let didJump = this.hero.jump();
         if (didJump) {
             this.sfx.jump.play();
         }
     }, this);
+    this.keys.secretKey.onDown.add(function () {
+        // console.log('die!', this.spiders);
+        const spiders = this.spiders.children;
+        for (var i = 0; i < spiders.length; i++) {
+            spiders[i].die();
+            this.sfx.stomp.play();
+        }
+    }, this);
+    this.keys.secretspawnkey.onDown.add(function () {
+        // console.log('Spawn!')
+        this._spawnSpiders({
+            spiders: [
+                {
+                    "x": this.hero.x + 60,
+                    "y": this.hero.y -45,
+                },
+            ],
+        });    
+    }, this);
+
     this.coinPickupCount = 0;
     this.hasKey = false;
     this.level = (data.level || 0) % LEVEL_COUNT;
@@ -350,25 +370,6 @@ PlayState._onHeroVsEnemy = function (hero, enemy) {
 };
 
 PlayState._handleInput = function () {
-    if (this.keys.secretKey.isDown) {
-        console.log('die!', this.spiders);
-        const spiders = this.spiders.children;
-        for (var i = 0; i < spiders.length; i++) {
-            spiders[i].die();
-            this.sfx.stomp.play();
-        }
-    }
-    if (this.keys.secretspawnkey.isDown) {
-        console.log('Spawn!')
-        this._spawnSpiders({
-            spiders: [
-                {
-                    "x": this.hero.x + 60,
-                    "y": this.hero.y -45,
-                },
-            ],
-        });
-    }
     if (this.keys.left.isDown) { // move hero left
         // ...          `
         this.hero.move(-1);
