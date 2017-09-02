@@ -133,7 +133,8 @@ PlayState.preload = function () {
     this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
     this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
-    this.game.load.spritesheet('door', 'images/door.png', 42, 66);
+    this.game.load.spritesheet('door', 'images/door.png', 42, 66);    this.game.load.spritesheet('scenery', 'images/decor.png', 42, 42);
+    
     // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
     this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
@@ -174,6 +175,7 @@ PlayState._loadLevel = function (data) {
     // spawn hero and enemies
     this._spawnCharacters({hero: data.hero, spiders: data.spiders});
     data.coins.forEach(this._spawnCoin, this);
+    data.decoration.forEach(this._spawnScenery, this);
     // after spawning the coins in this line:
     // data.coins.forEach(this._spawnCoin, this);
     this._spawnDoor(data.door.x, data.door.y);
@@ -185,6 +187,15 @@ PlayState._loadLevel = function (data) {
     const GRAVITY = 1200;
     this.game.physics.arcade.gravity.y = GRAVITY;
 };
+PlayState._spawnScenery = function (scenery) {
+    let sprite = this.bgDecoration.create(scenery.x, scenery.y, 'scenery');
+    console.log(sprite)
+    sprite.frame = scenery.frame;
+    sprite.anchor.set(0.5, 0);
+    this.game.physics.enable(sprite);
+    sprite.body.allowGravity = false;
+};
+
 PlayState._spawnCoin = function (coin) {
     let sprite = this.coins.create(coin.x, coin.y, 'coin');
     sprite.anchor.set(0.5, 0.5);
@@ -332,6 +343,7 @@ PlayState._onHeroVsEnemy = function (hero, enemy) {
         this._spawnSpiders(data);
     }
     else { // game over -> restart the game
+        this.sfx.bgm.stop();
         this.sfx.stomp.play();
         this.game.state.restart(true, false, {level: this.level});
     }
