@@ -10575,41 +10575,43 @@ var _phaser = __webpack_require__(/*! phaser */ 126);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
+var _config = __webpack_require__(/*! ./config */ 342);
+
+var _config2 = _interopRequireDefault(_config);
+
 var _PlayState = __webpack_require__(/*! ./PlayState */ 341);
 
 var _PlayState2 = _interopRequireDefault(_PlayState);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-window.onload = function () {
-  var game = new _phaser2.default.Game(960, 600, _phaser2.default.AUTO, 'game');
-  game.state.add('play', _PlayState2.default);
-  game.state.start('play', true, false, { level: 0 });
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// import BootState from './states/Boot'
-// import SplashState from './states/Splash'
-// import GameState from './states/Game'
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-// import config from './config'
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// class Game extends Phaser.Game {
-//   constructor () {
-//     const docElement = document.documentElement
-//     const width = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth
-//     const height = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight
+var Game = function (_Phaser$Game) {
+  _inherits(Game, _Phaser$Game);
 
-//     super(width, height, Phaser.CANVAS, 'content', null)
+  function Game() {
+    _classCallCheck(this, Game);
 
-//     this.state.add('Boot', BootState, false)
-//     this.state.add('Splash', SplashState, false)
-//     this.state.add('Game', GameState, false)
+    var docElement = document.documentElement;
+    var width = docElement.clientWidth > _config2.default.gameWidth ? _config2.default.gameWidth : docElement.clientWidth;
+    var height = docElement.clientHeight > _config2.default.gameHeight ? _config2.default.gameHeight : docElement.clientHeight;
 
-//     this.state.start('Boot')
-//   }
-// }
+    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, width, height, _phaser2.default.AUTO, 'game', null));
 
-// window.game = new Game()
+    _this.state.add('Play', _PlayState2.default);
+    _this.state.start('Play', true, false, { level: 0 });
+    return _this;
+  }
+
+  return Game;
+}(_phaser2.default.Game);
+
+window.game = new Game();
 
 /***/ }),
 /* 331 */,
@@ -10632,80 +10634,105 @@ window.onload = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Hero;
-function Hero(game, x, y) {
-  // call Phaser.Sprite constructor
-  Phaser.Sprite.call(this, game, x, y, 'hero');
-  this.anchor.set(0.5, 0.5);
-  this.game.physics.enable(this);
-  this.body.collideWorldBounds = true;
 
-  this.maxAirJump = 1;
-  this.currentAirJumps = 0;
-  //  this.body.allowGravity = false;
-  this.animations.add('stop', [0]);
-  this.animations.add('run', [1, 2], 8, true); // 8fps looped
-  this.animations.add('jump', [3]);
-  this.animations.add('fall', [4]);
-}
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-// inherit from Phaser.Sprite
-Hero.prototype = Object.create(Phaser.Sprite.prototype);
-Hero.prototype.constructor = Hero;
+var _phaser = __webpack_require__(/*! phaser */ 126);
 
-// add this method –and the ongoing Hero methods– AFTER these lines, or you
-// will override them when cloning the Phaser.Sprite prototype
-//
-// Hero.prototype = Object.create(Phaser.Sprite.prototype);
-// Hero.prototype.constructor = Hero;
-Hero.prototype._getAnimationName = function () {
-  var name = 'stop'; // default animation
+var _phaser2 = _interopRequireDefault(_phaser);
 
-  // jumping
-  if (this.body.velocity.y < 0) {
-    name = 'jump';
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Hero = function (_Phaser$Sprite) {
+  _inherits(Hero, _Phaser$Sprite);
+
+  function Hero(game, x, y) {
+    _classCallCheck(this, Hero);
+
+    var _this = _possibleConstructorReturn(this, (Hero.__proto__ || Object.getPrototypeOf(Hero)).call(this, game, x, y, 'hero'));
+
+    _this.anchor.set(0.5, 0.5);
+    _this.game.physics.enable(_this);
+    _this.body.collideWorldBounds = true;
+    _this.maxAirJump = 1;
+    _this.currentAirJumps = 0;
+    //  this.body.allowGravity = false;
+    _this.animations.add('stop', [0]);
+    _this.animations.add('run', [1, 2], 8, true); // 8fps looped
+    _this.animations.add('jump', [3]);
+    _this.animations.add('fall', [4]);
+    return _this;
   }
-  // falling
-  else if (this.body.velocity.y >= 0 && !this.body.touching.down) {
-      name = 'fall';
-    } else if (this.body.velocity.x !== 0 && this.body.touching.down) {
-      name = 'run';
+
+  _createClass(Hero, [{
+    key: '_getAnimationName',
+    value: function _getAnimationName() {
+      var name = 'stop'; // default animation
+
+      // jumping
+      if (this.body.velocity.y < 0) {
+        name = 'jump';
+      }
+      // falling
+      else if (this.body.velocity.y >= 0 && !this.body.touching.down) {
+          name = 'fall';
+        } else if (this.body.velocity.x !== 0 && this.body.touching.down) {
+          name = 'run';
+        }
+
+      return name;
     }
+  }, {
+    key: 'update',
+    value: function update() {
+      // update sprite animation, if it needs changing
+      var animationName = this._getAnimationName();
+      if (this.animations.name !== animationName) {
+        this.animations.play(animationName);
+      }
+    }
+  }, {
+    key: 'move',
+    value: function move(direction) {
+      var SPEED = 200;
+      this.body.velocity.x = direction * SPEED;
+      if (this.body.velocity.x < 0) {
+        this.scale.x = -1;
+      } else if (this.body.velocity.x > 0) {
+        this.scale.x = 1;
+      }
+    }
+  }, {
+    key: 'jump',
+    value: function jump() {
+      var JUMP_SPEED = 600;
+      var canJump = this.body.touching.down;
+      canJump = true;
 
-  return name;
-};
-Hero.prototype.update = function () {
-  // update sprite animation, if it needs changing
-  var animationName = this._getAnimationName();
-  if (this.animations.name !== animationName) {
-    this.animations.play(animationName);
-  }
-};
-Hero.prototype.move = function (direction) {
+      if (canJump) {
+        this.body.velocity.y = -JUMP_SPEED;
+      }
 
-  var SPEED = 200;
-  this.body.velocity.x = direction * SPEED;
-  if (this.body.velocity.x < 0) {
-    this.scale.x = -1;
-  } else if (this.body.velocity.x > 0) {
-    this.scale.x = 1;
-  }
-};
-Hero.prototype.jump = function () {
-  var JUMP_SPEED = 600;
-  var canJump = this.body.touching.down;
-  canJump = true;
+      return canJump;
+    }
+  }, {
+    key: 'bounce',
+    value: function bounce() {
+      var BOUNCE_SPEED = 200;
+      this.body.velocity.y = -BOUNCE_SPEED;
+    }
+  }]);
 
-  if (canJump) {
-    this.body.velocity.y = -JUMP_SPEED;
-  }
+  return Hero;
+}(_phaser2.default.Sprite);
 
-  return canJump;
-};
-Hero.prototype.bounce = function () {
-  var BOUNCE_SPEED = 200;
-  this.body.velocity.y = -BOUNCE_SPEED;
-};
+exports.default = Hero;
 
 /***/ }),
 /* 338 */
@@ -10722,46 +10749,73 @@ Hero.prototype.bounce = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Spider;
-function Spider(game, x, y) {
-  Phaser.Sprite.call(this, game, x, y, 'spider');
-  this.speed = getRandomSpeed();
 
-  // anchor
-  this.anchor.set(0.5);
-  // animation
-  this.animations.add('crawl', [0, 1, 2], 8, true);
-  this.animations.add('die', [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3], 12);
-  this.animations.play('crawl');
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  // physic properties
-  this.game.physics.enable(this);
-  this.body.collideWorldBounds = true;
-  this.body.velocity.x = getRandomSpeed();
-}
+var _phaser = __webpack_require__(/*! phaser */ 126);
+
+var _phaser2 = _interopRequireDefault(_phaser);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function getRandomSpeed() {
   return Math.random() * 100;
 }
 
-// inherit from Phaser.Sprite
-Spider.prototype = Object.create(Phaser.Sprite.prototype);
-Spider.prototype.constructor = Spider;
-Spider.prototype.update = function () {
-  // check against walls and reverse direction if necessary
-  if (this.body.touching.right || this.body.blocked.right) {
-    this.body.velocity.x = -getRandomSpeed(); // turn left
-  } else if (this.body.touching.left || this.body.blocked.left) {
-    this.body.velocity.x = getRandomSpeed(); // turn right
-  }
-};
-Spider.prototype.die = function () {
-  this.body.enable = false;
+var Spider = function (_Phaser$Sprite) {
+  _inherits(Spider, _Phaser$Sprite);
 
-  this.animations.play('die').onComplete.addOnce(function () {
-    this.kill();
-  }, this);
-};
+  function Spider(game, x, y) {
+    _classCallCheck(this, Spider);
+
+    var _this = _possibleConstructorReturn(this, (Spider.__proto__ || Object.getPrototypeOf(Spider)).call(this, game, x, y, 'spider'));
+
+    _this.speed = getRandomSpeed();
+
+    // anchor
+    _this.anchor.set(0.5);
+    // animation
+    _this.animations.add('crawl', [0, 1, 2], 8, true);
+    _this.animations.add('die', [0, 4, 0, 4, 0, 4, 3, 3, 3, 3, 3, 3], 12);
+    _this.animations.play('crawl');
+
+    // physic properties
+    _this.game.physics.enable(_this);
+    _this.body.collideWorldBounds = true;
+    _this.body.velocity.x = getRandomSpeed();
+    return _this;
+  }
+
+  _createClass(Spider, [{
+    key: 'update',
+    value: function update() {
+      // check against walls and reverse direction if necessary
+      if (this.body.touching.right || this.body.blocked.right) {
+        this.body.velocity.x = -getRandomSpeed(); // turn left
+      } else if (this.body.touching.left || this.body.blocked.left) {
+        this.body.velocity.x = getRandomSpeed(); // turn right
+      }
+    }
+  }, {
+    key: 'die',
+    value: function die() {
+      this.body.enable = false;
+      this.animations.play('die').onComplete.addOnce(function () {
+        this.kill();
+      }, this);
+    }
+  }]);
+
+  return Spider;
+}(_phaser2.default.Sprite);
+
+exports.default = Spider;
 
 /***/ }),
 /* 339 */,
@@ -10778,8 +10832,14 @@ Spider.prototype.die = function () {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _phaser = __webpack_require__(/*! phaser */ 126);
+
+var _phaser2 = _interopRequireDefault(_phaser);
 
 var _Hero = __webpack_require__(/*! ./Hero */ 337);
 
@@ -10791,289 +10851,355 @@ var _Spider2 = _interopRequireDefault(_Spider);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var PlayState = {};
-exports.default = PlayState;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-PlayState.preload = preload;
-// create game entities and set up world here
-PlayState.create = create;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function preload() {
-    this.game.load.json('level:0', 'data/level00.json');
-    this.game.load.image('background', 'images/background2.png');
-    this.game.load.image('ground', 'images/ground.png');
-    this.game.load.image('grass:8x1', 'images/grass_8x1.png');
-    this.game.load.image('grass:6x1', 'images/grass_6x1.png');
-    this.game.load.image('grass:4x1', 'images/grass_4x1.png');
-    this.game.load.image('grass:2x1', 'images/grass_2x1.png');
-    this.game.load.image('grass:1x1', 'images/grass_1x1.png');
-    this.game.load.image('icon:coin', 'images/pizza_icon.png');
-    this.game.load.image('font:numbers', 'images/numbers.png');
-    this.game.load.image('invisible-wall', 'images/invisible_wall.png');
-    this.game.load.json('level:1', 'data/level01.json');
-    this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
-    this.game.load.audio('sfx:jump', 'audio/jump.wav');
-    this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
-    this.game.load.spritesheet('door', 'images/door.png', 42, 66);
-    this.game.load.spritesheet('scenery', 'images/decor.png', 42, 42);
+var LEVEL_COUNT = 2;
 
-    // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
-    this.game.load.audio('sfx:coin', 'audio/coin.wav');
-    this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
-    this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
-    //this.game.load.image('hero', 'images/square-colors_42x42.png');
-    this.game.load.image('key', 'images/key.png');
-    this.game.load.audio('sfx:key', 'audio/key.wav');
-    this.game.load.audio('sfx:door', 'audio/door.wav');
-    this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
-    this.game.load.audio('sfx:bgm', 'audio/bgm.mp3');
-};
+var PlayState = function (_Phaser$State) {
+  _inherits(PlayState, _Phaser$State);
 
-function create() {
-    console.log(this);
-    this.sfx = {
+  function PlayState() {
+    _classCallCheck(this, PlayState);
+
+    return _possibleConstructorReturn(this, (PlayState.__proto__ || Object.getPrototypeOf(PlayState)).apply(this, arguments));
+  }
+
+  _createClass(PlayState, [{
+    key: 'init',
+    value: function init(data) {
+      this.game.renderer.renderSession.roundPixels = true;
+      this.keys = this.game.input.keyboard.addKeys({
+        spacebar: _phaser2.default.KeyCode.SPACEBAR,
+        left: _phaser2.default.KeyCode.LEFT,
+        right: _phaser2.default.KeyCode.RIGHT,
+        up: _phaser2.default.KeyCode.UP, // add this line
+        secretKey: _phaser2.default.KeyCode.TILDE,
+        secretspawnkey: _phaser2.default.KeyCode.Z
+      });
+      this.keys.up.onDown.add(function () {
+        var didJump = this.hero.jump();
+        if (didJump) {
+          this.sfx.jump.play();
+        }
+      }, this);
+      this.keys.secretKey.onDown.add(function () {
+        // console.log('die!', this.spiders);
+        var spiders = this.spiders.children;
+        for (var i = 0; i < spiders.length; i++) {
+          spiders[i].die();
+          this.sfx.stomp.play();
+        }
+      }, this);
+      this.keys.secretspawnkey.onDown.add(function () {
+        // console.log('Spawn!')
+        this._spawnSpiders({
+          spiders: [{
+            x: this.hero.x + 60,
+            y: this.hero.y - 45
+          }]
+        });
+      }, this);
+
+      this.coinPickupCount = 0;
+      this.hasKey = false;
+      this.level = (data.level || 0) % LEVEL_COUNT;
+    }
+  }, {
+    key: 'preload',
+    value: function preload() {
+      this.game.load.json('level:0', 'data/level00.json');
+      this.game.load.image('background', 'images/background2.png');
+      this.game.load.image('ground', 'images/ground.png');
+      this.game.load.image('grass:8x1', 'images/grass_8x1.png');
+      this.game.load.image('grass:6x1', 'images/grass_6x1.png');
+      this.game.load.image('grass:4x1', 'images/grass_4x1.png');
+      this.game.load.image('grass:2x1', 'images/grass_2x1.png');
+      this.game.load.image('grass:1x1', 'images/grass_1x1.png');
+      this.game.load.image('icon:coin', 'images/pizza_icon.png');
+      this.game.load.image('font:numbers', 'images/numbers.png');
+      this.game.load.image('invisible-wall', 'images/invisible_wall.png');
+      this.game.load.json('level:1', 'data/level01.json');
+      this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
+      this.game.load.audio('sfx:jump', 'audio/jump.wav');
+      this.game.load.spritesheet('coin', 'images/pizza_animated.png', 22, 22);
+      this.game.load.spritesheet('door', 'images/door.png', 42, 66);
+      this.game.load.spritesheet('scenery', 'images/decor.png', 42, 42);
+
+      // this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
+      this.game.load.audio('sfx:coin', 'audio/coin.wav');
+      this.game.load.spritesheet('spider', 'images/spider.png', 42, 32);
+      this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
+      // this.game.load.image('hero', 'images/square-colors_42x42.png');
+      this.game.load.image('key', 'images/key.png');
+      this.game.load.audio('sfx:key', 'audio/key.wav');
+      this.game.load.audio('sfx:door', 'audio/door.wav');
+      this.game.load.spritesheet('icon:key', 'images/key_icon.png', 34, 30);
+      this.game.load.audio('sfx:bgm', 'audio/bgm.mp3');
+    }
+  }, {
+    key: 'create',
+    value: function create() {
+      console.log(this);
+      this.sfx = {
         key: this.game.add.audio('sfx:key'),
         door: this.game.add.audio('sfx:door'),
         jump: this.game.add.audio('sfx:jump'),
         coin: this.game.add.audio('sfx:coin'),
         stomp: this.game.add.audio('sfx:stomp'),
         bgm: this.game.add.audio('sfx:bgm')
-    };
-    this.game.add.image(0, 0, 'background');
-    this._loadLevel(this.game.cache.getJSON('level:' + this.level));
-    this._createHud();
-};
-PlayState._loadLevel = function (data) {
-    this.sfx.bgm.play();
-    // create all the groups/layers that we need
-    this.bgDecoration = this.game.add.group();
-    this.platforms = this.game.add.group();
-    this.coins = this.game.add.group();
-    this.spiders = this.game.add.group();
-    this.enemyWalls = this.game.add.group();
-    this.enemyWalls.visible = false;
-    data.platforms.forEach(this._spawnPlatform, this);
-    console.log(data);
-    // spawn hero and enemies
-    this._spawnCharacters({ hero: data.hero, spiders: data.spiders });
-    data.coins.forEach(this._spawnCoin, this);
-    data.decoration.forEach(this._spawnScenery, this);
-    // after spawning the coins in this line:
-    // data.coins.forEach(this._spawnCoin, this);
-    this._spawnDoor(data.door.x, data.door.y);
-    // add it below the call to _spawnDoor
-    // this._spawnDoor(data.door.x, data.door.y);
-    this._spawnKey(data.key.x, data.key.y);
+      };
+      this.game.add.image(0, 0, 'background');
+      this._loadLevel(this.game.cache.getJSON('level:' + this.level));
+      this._createHud();
+    }
+  }, {
+    key: '_loadLevel',
+    value: function _loadLevel(data) {
+      this.sfx.bgm.play();
+      // create all the groups/layers that we need
+      this.bgDecoration = this.game.add.group();
+      this.platforms = this.game.add.group();
+      this.coins = this.game.add.group();
+      this.spiders = this.game.add.group();
+      this.enemyWalls = this.game.add.group();
+      this.enemyWalls.visible = false;
+      data.platforms.forEach(this._spawnPlatform, this);
+      console.log(data);
+      // spawn hero and enemies
+      this._spawnCharacters({ hero: data.hero, spiders: data.spiders });
+      data.coins.forEach(this._spawnCoin, this);
+      data.decoration.forEach(this._spawnScenery, this);
+      // after spawning the coins in this line:
+      // data.coins.forEach(this._spawnCoin, this);
+      this._spawnDoor(data.door.x, data.door.y);
+      // add it below the call to _spawnDoor
+      // this._spawnDoor(data.door.x, data.door.y);
+      this._spawnKey(data.key.x, data.key.y);
 
-    // enable gravity
-    var GRAVITY = 1200;
-    this.game.physics.arcade.gravity.y = GRAVITY;
-};
-PlayState._spawnScenery = function (scenery) {
-    var sprite = this.bgDecoration.create(scenery.x, scenery.y, 'scenery');
-    console.log(sprite);
-    sprite.frame = scenery.frame;
-    sprite.anchor.set(0.5, 0);
-    this.game.physics.enable(sprite);
-    sprite.body.allowGravity = false;
-};
-
-PlayState._spawnCoin = function (coin) {
-    var sprite = this.coins.create(coin.x, coin.y, 'coin');
-    sprite.anchor.set(0.5, 0.5);
-    sprite.animations.add('rotate', [0, 1, 2, 1], 6, true); // 6fps, looped
-    sprite.animations.play('rotate');
-    this.game.physics.enable(sprite);
-    sprite.body.allowGravity = false;
-};
-
-PlayState._spawnSpiders = function (data) {
-    data.spiders.forEach(function (spider) {
+      // enable gravity
+      var GRAVITY = 1200;
+      this.game.physics.arcade.gravity.y = GRAVITY;
+    }
+  }, {
+    key: '_spawnScenery',
+    value: function _spawnScenery(scenery) {
+      var sprite = this.bgDecoration.create(scenery.x, scenery.y, 'scenery');
+      console.log(sprite);
+      sprite.frame = scenery.frame;
+      sprite.anchor.set(0.5, 0);
+      this.game.physics.enable(sprite);
+      sprite.body.allowGravity = false;
+    }
+  }, {
+    key: '_spawnCoin',
+    value: function _spawnCoin(coin) {
+      var sprite = this.coins.create(coin.x, coin.y, 'coin');
+      sprite.anchor.set(0.5, 0.5);
+      sprite.animations.add('rotate', [0, 1, 2, 1], 6, true); // 6fps, looped
+      sprite.animations.play('rotate');
+      this.game.physics.enable(sprite);
+      sprite.body.allowGravity = false;
+    }
+  }, {
+    key: '_spawnSpiders',
+    value: function _spawnSpiders(data) {
+      data.spiders.forEach(function (spider) {
         var sprite = new _Spider2.default(this.game, spider.x, spider.y);
         this.spiders.add(sprite);
-    }, this);
-};
+      }, this);
+    }
+  }, {
+    key: '_spawnCharacters',
+    value: function _spawnCharacters(data) {
+      // spawn spiders
+      this._spawnSpiders(data);
+      // spawn hero
+      this.hero = new _Hero2.default(this.game, data.hero.x, data.hero.y);
+      console.log(this.hero);
+      // this.hero.scale.x = 4;
+      // this.hero.scale.y = -1;
+      // this.hero.x = 200;
+      // this.hero.y = 100;
+      // this.spiders.scale.x = 1
+      // this.spiders.scale.y = 4
+      // this.spiders.x = 200
+      // this.spiders.y = 100
+      // this.hero.allowrotation  =  false
+      this.game.add.existing(this.hero);
+    }
+  }, {
+    key: '_spawnEnemyWall',
+    value: function _spawnEnemyWall(x, y, side) {
+      var sprite = this.enemyWalls.create(x, y, 'invisible-wall');
+      // anchor and y displacement
+      sprite.anchor.set(side === 'left' ? 1 : 0, 1);
 
-PlayState._spawnCharacters = function (data) {
-    // spawn spiders
-    this._spawnSpiders(data);
-    // spawn hero
-    this.hero = new _Hero2.default(this.game, data.hero.x, data.hero.y);
-    console.log(this.hero);
-    // this.hero.scale.x = 4;
-    // this.hero.scale.y = -1;
-    // this.hero.x = 200;
-    // this.hero.y = 100;
-    // this.spiders.scale.x = 1
-    // this.spiders.scale.y = 4
-    // this.spiders.x = 200
-    // this.spiders.y = 100
-    // this.hero.allowrotation  =  false
-    this.game.add.existing(this.hero);
-};
-
-PlayState._spawnEnemyWall = function (x, y, side) {
-    var sprite = this.enemyWalls.create(x, y, 'invisible-wall');
-    // anchor and y displacement
-    sprite.anchor.set(side === 'left' ? 1 : 0, 1);
-
-    // physic properties
-    this.game.physics.enable(sprite);
-    sprite.body.immovable = true;
-    sprite.body.allowGravity = false;
-};
-PlayState._spawnPlatform = function (platform) {
-    // this.game.add.sprite(platform.x, platform.y, platform.image);
-    var sprite = this.platforms.create(platform.x, platform.y, platform.image);
-    this.game.physics.enable(sprite);
-    sprite.body.allowGravity = false;
-    sprite.body.immovable = true;
-    this._spawnEnemyWall(platform.x, platform.y, 'left');
-    this._spawnEnemyWall(platform.x + sprite.width, platform.y, 'right');
-};
-PlayState._spawnDoor = function (x, y) {
-    this.door = this.bgDecoration.create(x, y, 'door');
-    this.door.anchor.setTo(0.5, 1);
-    this.game.physics.enable(this.door);
-    this.door.body.allowGravity = false;
-};
-PlayState._spawnKey = function (x, y) {
-    this.key = this.bgDecoration.create(x, y, 'key');
-    this.key.anchor.set(0.5, 0.5);
-    this.game.physics.enable(this.key);
-    this.key.body.allowGravity = false;
-    // add a small 'up & down' animation via a tween
-    this.key.y -= 3;
-    this.game.add.tween(this.key).to({ y: this.key.y + 6 }, 800, Phaser.Easing.Sinusoidal.InOut).yoyo(true).loop().start();
-};
-
-PlayState._createHud = function () {
-    this.keyIcon = this.game.make.image(0, 19, 'icon:key');
-    this.keyIcon.anchor.set(0, 0.5);
-    var NUMBERS_STR = '0123456789X ';
-    this.coinFont = this.game.add.retroFont('font:numbers', 20, 26, NUMBERS_STR, 6);
-    var coinIcon = this.game.make.image(this.keyIcon.width + 7, 0, 'icon:coin');
-    var coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width, coinIcon.height / 2, this.coinFont);
-    coinScoreImg.anchor.set(0, 0.5);
-    this.hud = this.game.add.group();
-    this.hud.add(coinIcon);
-    this.hud.position.set(10, 10);
-    this.hud.add(coinScoreImg);
-    this.hud.add(this.keyIcon);
-};
-
-var LEVEL_COUNT = 2;
-
-PlayState.init = function (data) {
-    this.game.renderer.renderSession.roundPixels = true;
-    this.keys = this.game.input.keyboard.addKeys({
-        spacebar: Phaser.KeyCode.SPACEBAR,
-        left: Phaser.KeyCode.LEFT,
-        right: Phaser.KeyCode.RIGHT,
-        up: Phaser.KeyCode.UP, // add this line
-        secretKey: Phaser.KeyCode.TILDE,
-        secretspawnkey: Phaser.KeyCode.Z
-    });
-    this.keys.up.onDown.add(function () {
-        var didJump = this.hero.jump();
-        if (didJump) {
-            this.sfx.jump.play();
-        }
-    }, this);
-    this.keys.secretKey.onDown.add(function () {
-        // console.log('die!', this.spiders);
-        var spiders = this.spiders.children;
-        for (var i = 0; i < spiders.length; i++) {
-            spiders[i].die();
-            this.sfx.stomp.play();
-        }
-    }, this);
-    this.keys.secretspawnkey.onDown.add(function () {
-        // console.log('Spawn!')
-        this._spawnSpiders({
-            spiders: [{
-                "x": this.hero.x + 60,
-                "y": this.hero.y - 45
-            }]
-        });
-    }, this);
-
-    this.coinPickupCount = 0;
-    this.hasKey = false;
-    this.level = (data.level || 0) % LEVEL_COUNT;
-};
-PlayState.update = function () {
-    this._handleCollisions();
-    this._handleInput();
-    this.coinFont.text = 'x' + this.coinPickupCount;
-    this.keyIcon.frame = this.hasKey ? 1 : 0;
-};
-PlayState._handleCollisions = function () {
-    this.game.physics.arcade.collide(this.spiders, this.platforms);
-    this.game.physics.arcade.collide(this.spiders, this.enemyWalls);
-    this.game.physics.arcade.collide(this.hero, this.platforms);
-    this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin, null, this);
-    this.game.physics.arcade.overlap(this.hero, this.spiders, this._onHeroVsEnemy, null, this);
-    this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey, null, this);
-    this.game.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor,
-    // ignore if there is no key or the player is on air
-    function (hero, door) {
+      // physic properties
+      this.game.physics.enable(sprite);
+      sprite.body.immovable = true;
+      sprite.body.allowGravity = false;
+    }
+  }, {
+    key: '_spawnPlatform',
+    value: function _spawnPlatform(platform) {
+      // this.game.add.sprite(platform.x, platform.y, platform.image);
+      var sprite = this.platforms.create(platform.x, platform.y, platform.image);
+      this.game.physics.enable(sprite);
+      sprite.body.allowGravity = false;
+      sprite.body.immovable = true;
+      this._spawnEnemyWall(platform.x, platform.y, 'left');
+      this._spawnEnemyWall(platform.x + sprite.width, platform.y, 'right');
+    }
+  }, {
+    key: '_spawnDoor',
+    value: function _spawnDoor(x, y) {
+      this.door = this.bgDecoration.create(x, y, 'door');
+      this.door.anchor.setTo(0.5, 1);
+      this.game.physics.enable(this.door);
+      this.door.body.allowGravity = false;
+    }
+  }, {
+    key: '_spawnKey',
+    value: function _spawnKey(x, y) {
+      this.key = this.bgDecoration.create(x, y, 'key');
+      this.key.anchor.set(0.5, 0.5);
+      this.game.physics.enable(this.key);
+      this.key.body.allowGravity = false;
+      // add a small 'up & down' animation via a tween
+      this.key.y -= 3;
+      this.game.add.tween(this.key).to({ y: this.key.y + 6 }, 800, _phaser2.default.Easing.Sinusoidal.InOut).yoyo(true).loop().start();
+    }
+  }, {
+    key: '_createHud',
+    value: function _createHud() {
+      this.keyIcon = this.game.make.image(0, 19, 'icon:key');
+      this.keyIcon.anchor.set(0, 0.5);
+      var NUMBERS_STR = '0123456789X ';
+      this.coinFont = this.game.add.retroFont('font:numbers', 20, 26, NUMBERS_STR, 6);
+      var coinIcon = this.game.make.image(this.keyIcon.width + 7, 0, 'icon:coin');
+      var coinScoreImg = this.game.make.image(coinIcon.x + coinIcon.width, coinIcon.height / 2, this.coinFont);
+      coinScoreImg.anchor.set(0, 0.5);
+      this.hud = this.game.add.group();
+      this.hud.add(coinIcon);
+      this.hud.position.set(10, 10);
+      this.hud.add(coinScoreImg);
+      this.hud.add(this.keyIcon);
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      this._handleCollisions();
+      this._handleInput();
+      this.coinFont.text = 'x' + this.coinPickupCount;
+      this.keyIcon.frame = this.hasKey ? 1 : 0;
+    }
+  }, {
+    key: '_handleCollisions',
+    value: function _handleCollisions() {
+      this.game.physics.arcade.collide(this.spiders, this.platforms);
+      this.game.physics.arcade.collide(this.spiders, this.enemyWalls);
+      this.game.physics.arcade.collide(this.hero, this.platforms);
+      this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin, null, this);
+      this.game.physics.arcade.overlap(this.hero, this.spiders, this._onHeroVsEnemy, null, this);
+      this.game.physics.arcade.overlap(this.hero, this.key, this._onHeroVsKey, null, this);
+      this.game.physics.arcade.overlap(this.hero, this.door, this._onHeroVsDoor,
+      // ignore if there is no key or the player is on air
+      function (hero, door) {
         return this.hasKey && hero.body.touching.down;
-    }, this);
-};
-PlayState._onHeroVsCoin = function (hero, coin) {
-    this.sfx.coin.play();
-    coin.kill();
-    this.coinPickupCount++;
-};
-PlayState._onHeroVsEnemy = function (hero, enemy) {
-    if (hero.body.y + 10 < enemy.body.y) {
+      }, this);
+    }
+  }, {
+    key: '_onHeroVsCoin',
+    value: function _onHeroVsCoin(hero, coin) {
+      this.sfx.coin.play();
+      coin.kill();
+      this.coinPickupCount++;
+    }
+  }, {
+    key: '_onHeroVsEnemy',
+    value: function _onHeroVsEnemy(hero, enemy) {
+      if (hero.body.y + 10 < enemy.body.y) {
         // kill enemies when hero is falling
         hero.bounce();
         enemy.die();
         this.sfx.stomp.play();
 
         var data = {
-            spiders: []
+          spiders: []
         };
         for (var i = 0; i < 2; i++) {
-            data.spiders.push({
-                x: this.hero.x + 60 + i * 30,
-                y: this.hero.y - 45 - i * 30
-            });
+          data.spiders.push({
+            x: this.hero.x + 60 + i * 30,
+            y: this.hero.y - 45 - i * 30
+          });
         }
         this._spawnSpiders(data);
-    } else {
+      } else {
         // game over -> restart the game
         this.sfx.bgm.stop();
         this.sfx.stomp.play();
         this.game.state.restart(true, false, { level: this.level });
+      }
     }
-};
-
-PlayState._handleInput = function () {
-    if (this.keys.left.isDown) {
+  }, {
+    key: '_handleInput',
+    value: function _handleInput() {
+      if (this.keys.left.isDown) {
         // move hero left
         // ...          `
         this.hero.move(-1);
-    } else if (this.keys.right.isDown) {
+      } else if (this.keys.right.isDown) {
         // move hero right
         // ...
         this.hero.move(1);
-    } else {
+      } else {
         // stop
         this.hero.move(0);
+      }
     }
-};
-PlayState._onHeroVsKey = function (hero, key) {
-    this.sfx.key.play();
-    key.kill();
-    this.hasKey = true;
-};
-PlayState._onHeroVsDoor = function (hero, door) {
-    this.sfx.door.play();
-    this.game.state.restart(true, false, { level: this.level + 1 });
+  }, {
+    key: '_onHeroVsKey',
+    value: function _onHeroVsKey(hero, key) {
+      this.sfx.key.play();
+      key.kill();
+      this.hasKey = true;
+    }
+  }, {
+    key: '_onHeroVsDoor',
+    value: function _onHeroVsDoor(hero, door) {
+      this.sfx.door.play();
+      this.game.state.restart(true, false, { level: this.level + 1 });
+    }
+  }]);
+
+  return PlayState;
+}(_phaser2.default.State);
+
+exports.default = PlayState;
+
+/***/ }),
+/* 342 */
+/*!***********************!*\
+  !*** ./src/config.js ***!
+  \***********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  gameWidth: 900,
+  gameHeight: 600,
+  localStorageName: 'phaseres6webpack'
 };
 
 /***/ })
