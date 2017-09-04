@@ -10575,10 +10575,6 @@ var _phaser = __webpack_require__(/*! phaser */ 126);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
-var _config = __webpack_require__(/*! ./config */ 342);
-
-var _config2 = _interopRequireDefault(_config);
-
 var _PlayState = __webpack_require__(/*! ./PlayState */ 341);
 
 var _PlayState2 = _interopRequireDefault(_PlayState);
@@ -10597,11 +10593,7 @@ var Game = function (_Phaser$Game) {
   function Game() {
     _classCallCheck(this, Game);
 
-    var docElement = document.documentElement;
-    var width = docElement.clientWidth > _config2.default.gameWidth ? _config2.default.gameWidth : docElement.clientWidth;
-    var height = docElement.clientHeight > _config2.default.gameHeight ? _config2.default.gameHeight : docElement.clientHeight;
-
-    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, width, height, _phaser2.default.AUTO, 'game', null));
+    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, 900, 600, _phaser2.default.AUTO, 'game', null));
 
     _this.state.add('Play', _PlayState2.default);
     _this.state.start('Play', true, false, { level: 0 });
@@ -11180,27 +11172,6 @@ var PlayState = function (_Phaser$State) {
 }(_phaser2.default.State);
 
 exports.default = PlayState;
-
-/***/ }),
-/* 342 */
-/*!***********************!*\
-  !*** ./src/config.js ***!
-  \***********************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {
-  gameWidth: 900,
-  gameHeight: 600,
-  localStorageName: 'phaseres6webpack'
-};
 
 /***/ })
 ],[127]);
