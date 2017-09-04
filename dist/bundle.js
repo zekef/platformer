@@ -10593,7 +10593,7 @@ var Game = function (_Phaser$Game) {
   function Game() {
     _classCallCheck(this, Game);
 
-    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, 900, 600, _phaser2.default.AUTO, 'game', null));
+    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this, 960, 600, _phaser2.default.AUTO, 'game', null));
 
     _this.state.add('Play', _PlayState2.default);
     _this.state.start('Play', true, false, { level: 0 });
